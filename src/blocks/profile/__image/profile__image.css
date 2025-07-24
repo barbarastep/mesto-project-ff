@@ -37,6 +37,10 @@
   z-index: 2;
 }
 
+.profile__image:hover {
+  cursor: pointer;
+}
+
 .profile__image:hover::after,
 .profile__image:hover::before {
   cursor: pointer;
