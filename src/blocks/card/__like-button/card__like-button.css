@@ -2,7 +2,7 @@
   width: 21px;
   height: 18px;
   background: transparent url('../../../images/like-inactive.svg') no-repeat;
-  
+
   background-size: 21px 18px;
   border: none;
   cursor: pointer;
@@ -17,4 +17,12 @@
 
 .card__like-button:hover {
   opacity: 0.6;
+}
+
+.card__like-counter {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+  color: #000;
 }
