@@ -71,7 +71,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve",
-    "predeploy": "npm run build",
+    "copy-readme": "cp README.md dist/README.md",
+    "predeploy": "npm run build && npm run copy-readme",
     "deploy": "gh-pages -d dist"
   },
   "repository": {

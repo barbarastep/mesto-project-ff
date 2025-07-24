@@ -46,10 +46,6 @@ const popups = [
 
 let currentUserId;
 
-// Изменение текта кнопки при загрузке
-// const submitButton = formAddNewCard.querySelector('.popup__button');
-// const originalText = submitButton.textContent;
-
 //
 // Функции
 //
@@ -84,7 +80,6 @@ function handleProfileFormSubmit(evt) {
       textProfileJob.textContent = user.about;
       closePopup(popupProfile, handlePopupEscClose);
     })
-    .catch((err) => console.log('Ошибка:', err))
     .finally(() => {
       toggleButtonText(submitButton, 'Сохранение...', originalText);
     })
@@ -104,7 +99,6 @@ function handleAvatarFormSubmit(evt) {
       profileAvatar.style.backgroundImage = `url('${user.avatar}')`;
       closePopup(popupAvatar, handlePopupEscClose);
     })
-    .catch((err) => console.log('Ошибка при обновлении аватара:', err))
     .finally(() => {
       toggleButtonText(submitButton, 'Сохранение...', originalText);
     })
@@ -127,7 +121,6 @@ function handleAddNewCardSubmit(evt) {
       closePopup(popupAddNewCard, handlePopupEscClose);
       formAddNewCard.reset();
     })
-    .catch((err) => console.log('Ошибка при добавлении карточки:', err))
     .finally(() => {
       toggleButtonText(submitButton, 'Сохранение...', originalText);
     });
@@ -192,7 +185,6 @@ Promise.all([getUserInfo(), getCards()])
   .then(([userData, cards]) => {
     textProfileName.textContent = userData.name;
     textProfileJob.textContent = userData.about;
-    profileAvatar.src = userData.avatar;
 
     profileAvatar.style.backgroundImage = `url('${userData.avatar}')`;
 
@@ -202,7 +194,4 @@ Promise.all([getUserInfo(), getCards()])
       const card = createCard(data, handleDelete, handleCardImageClick, currentUserId);
       cardList.appendChild(card);
     });
-  })
-  .catch((err) => {
-    console.log('Ошибка при загрузке данных:', err);
   });

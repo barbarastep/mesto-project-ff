@@ -8,7 +8,6 @@ export function handleDelete(cardElement, cardId) {
     .then(() => {
       cardElement.remove();
     })
-    .catch((err) => console.log('Ошибка при удалении карточки:', err));
 }
 
 // Создание карточки
@@ -42,7 +41,6 @@ export function createCard(data, handleDelete, handleImageClick, currentUserId) 
         cardLikeCounter.textContent = updatedCard.likes.length;
         buttonLikeCard.classList.toggle('card__like-button_is-active');
       })
-      .catch((err) => console.log('Ошибка при лайке:', err));
   });
 
   imageCard.addEventListener('click', () => handleImageClick(data));
