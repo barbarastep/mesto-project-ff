@@ -1,3 +1,4 @@
+// Конфиг API: адрес и заголовки
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-42',
   headers: {
@@ -6,7 +7,7 @@ const config = {
   }
 };
 
-// Обработка ответа
+// Проверка ответа сервера
 const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
@@ -14,21 +15,21 @@ const checkResponse = (res) => {
   return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-// Загрузка информации о пользователе
+// Получить данные пользователя
 export const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   }).then(checkResponse);
 };
 
-// Загрузка карточек с сервера
+// Получить список карточек
 export const getCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   }).then(checkResponse);
 };
 
-// Редактирование профиля
+// Обновить имя и описание профиля
 export const updateUserInfo = (name, about) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
@@ -37,7 +38,7 @@ export const updateUserInfo = (name, about) => {
   }).then(checkResponse);
 };
 
-// Добавление новой карточки
+// Добавить новую карточку
 export const addCard = (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
@@ -46,7 +47,7 @@ export const addCard = (name, link) => {
   }).then(checkResponse);
 };
 
-// Лайк карточки
+// Поставить/снять лайк
 export const toggleCardLike = (cardId, isLiked) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: isLiked ? 'DELETE' : 'PUT',
@@ -54,7 +55,7 @@ export const toggleCardLike = (cardId, isLiked) => {
   }).then(checkResponse);
 };
 
-// Удаление карточки
+// Удалить карточку
 export const deleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
@@ -62,7 +63,7 @@ export const deleteCard = (cardId) => {
   }).then(checkResponse);
 }
 
-// Обновление аватара пользователя
+// Обновить аватар
 export const updateAvatar = (avatarUrl) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',

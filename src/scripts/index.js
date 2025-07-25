@@ -1,3 +1,4 @@
+// Импорт стилей и модулей
 import '../pages/index.css';
 import { getUserInfo, getCards, updateUserInfo, addCard, updateAvatar } from './api.js';
 import { createCard, handleDelete } from './card.js';
@@ -8,7 +9,7 @@ import { enableValidation, clearValidation } from './validation.js';
 // Переменные
 //
 
-const cardList = document.querySelector('.places__list');
+const cardList = document.querySelector('.places__list'); // Список карточек
 
 // Элементы профиля
 const textProfileName = document.querySelector('.profile__title');
@@ -37,6 +38,7 @@ const popupFullImage = document.querySelector('.popup_type_image');
 const imagePopupFullImage = popupFullImage.querySelector('.popup__image');
 const captionPopupFullImage = popupFullImage.querySelector('.popup__caption');
 
+// Список попапов с кнопками закрытия — для навешивания обработчиков
 const popups = [
   { selector: '.popup_type_edit .popup__close', popup: popupProfile },
   { selector: '.popup_type_new-card .popup__close', popup: popupAddNewCard },
@@ -44,13 +46,23 @@ const popups = [
   { selector: '.popup_type_update-avatar .popup__close', popup: popupAvatar }
 ];
 
-let currentUserId;
+let currentUserId; // ID текущего пользователя (нужен для карточек)
+
+// Конфигурация валидации
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button-inactive',
+  inputErrorClass: 'popup__input_type_error popup__input_no-margin',
+  errorClass: 'popup__input-error_active'
+};
 
 //
 // Функции
 //
 
-// Изменение текта кнопки при загрузке
+// Возвращает кнопку формы и её изначальный текст
 function getSubmitButtonInfo(formElement) {
   const button = formElement.querySelector('.popup__button');
   return {
@@ -59,7 +71,7 @@ function getSubmitButtonInfo(formElement) {
   };
 }
 
-// Обработчик клика на изображение карточки
+// Открывает попап с картинкой
 function handleCardImageClick(data) {
   imagePopupFullImage.src = data.link;
   imagePopupFullImage.alt = data.name;
@@ -67,7 +79,7 @@ function handleCardImageClick(data) {
   openPopup(popupFullImage, handlePopupEscClose);
 };
 
-// Обработчик заполнения формы профиля
+// Сабмит формы профиля
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
@@ -85,7 +97,7 @@ function handleProfileFormSubmit(evt) {
     })
 };
 
-// Обработчик обновления аватара
+// Сабмит формы обновления аватара
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
 
@@ -104,7 +116,7 @@ function handleAvatarFormSubmit(evt) {
     })
 };
 
-// Обработчик добавления новой карточки
+// Сабмит формы добавления новой карточки
 function handleAddNewCardSubmit(evt) {
   evt.preventDefault();
 
@@ -126,7 +138,7 @@ function handleAddNewCardSubmit(evt) {
     });
 }
 
-// Обработчик изменения текста на кнопке при загрузке
+// Меняет текст кнопки на "Сохранение..." и обратно
 function toggleButtonText(button, loadingText, originalText = null) {
   if (!originalText) {
     originalText = button.textContent;
@@ -139,48 +151,48 @@ function toggleButtonText(button, loadingText, originalText = null) {
   return originalText;
 }
 
-// Слушатели событий
+//
+// Слушатели
+//
+
+// Сабмиты форм
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAddNewCard.addEventListener('submit', handleAddNewCardSubmit);
 formAvatar.addEventListener('submit', handleAvatarFormSubmit);
 
-//
-// Кнопки
-//
-
 // Кнопка редактирования профиля
 document.querySelector('.profile__edit-button').addEventListener('click', () => {
   formProfile.reset();
-  clearValidation(formProfile);
+  clearValidation(formProfile, validationConfig);
   inputProfileName.value = textProfileName.textContent;
   inputProfileJob.value = textProfileJob.textContent;
   openPopup(popupProfile, handlePopupEscClose);
 });
 
-// Кнопка обновления аватара
+// Кнопка изменения аватара
 profileAvatar.addEventListener('click', () => {
   formAvatar.reset();
-  clearValidation(formAvatar);
+  clearValidation(formAvatar, validationConfig);
   openPopup(popupAvatar, handlePopupEscClose);
 });
 
 // Кнопка добавления новой карточки
 document.querySelector('.profile__add-button').addEventListener('click', () => {
   formAddNewCard.reset();
-  clearValidation(formAddNewCard);
+  clearValidation(formAddNewCard, validationConfig);
   openPopup(popupAddNewCard, handlePopupEscClose);
 });
 
-// Закрытие попапов
+// Обработчики закрытия попапов по крестику и оверлею
 popups.forEach(({ selector, popup }) => {
   document.querySelector(selector).addEventListener('click', () => closePopup(popup, handlePopupEscClose));
   setPopupOverlayListener(popup, () => closePopup(popup, handlePopupEscClose));
 });
 
-// Валидация формы
-enableValidation();
+// Включение валидации всех форм
+enableValidation(validationConfig);
 
-// Получение информации о пользователе и карточках
+// Получение данных о пользователе и карточках при загрузке страницы
 Promise.all([getUserInfo(), getCards()])
   .then(([userData, cards]) => {
     textProfileName.textContent = userData.name;
